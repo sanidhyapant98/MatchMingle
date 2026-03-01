@@ -1,11 +1,12 @@
 import { User } from "../models/userModel.js"
 import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 
 export const signup = async (req, res)=>{
     try {
-        const {firstName, lastName, email, password, gender, age} = req.body
+        const {firstName, lastName, email, password, gender, age, profileUrl, skills, bio} = req.body
         const hashedPassword = bcrypt.hashSync(password, 10)
-        const user = await User.create({firstName, lastName, email, password: hashedPassword, gender, age})
+        const user = await User.create({firstName, lastName, email, password: hashedPassword, gender, age, profileUrl, skills, bio})
         res.status(201).send("User created successfully")
     }catch(err){
         res.status(500).send("Error : " + err.message)
@@ -19,7 +20,7 @@ export const login = async (req, res)=>{
         if(!user){
             res.status(404).send("User not found")
         }
-        const isPasswordValid = bcrypt.compare(password, user.password)
+        const isPasswordValid = await bcrypt.compare(password, user.password)
         if(!isPasswordValid){
             res.status(401).send("Invalid Password")
         }else{

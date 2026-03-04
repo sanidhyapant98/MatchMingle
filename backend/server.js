@@ -5,6 +5,7 @@ import connectDB from "./config/db.js"
 import authRouter from "./routes/authRouter.js"
 import profileRouter from "./routes/profileRouter.js"
 import cookieParser from "cookie-parser"
+import requestRouter from "./routes/requestRouter.js"
 
 dotenv.config()
 
@@ -17,6 +18,7 @@ app.use(cookieParser())
 
 app.use('/api/auth', authRouter)
 app.use('/api/profile', profileRouter)
+app.use('/api/request', requestRouter)
 
 const PORT = process.env.PORT || 5000
 

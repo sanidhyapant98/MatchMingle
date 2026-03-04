@@ -12,13 +12,13 @@ const sendConnectionRequest = async (req, res) => {
                 message : "User not found"
             })
         }
-        if(fromUserId === toUserId){
+        if(fromUserId.equals(toUserId)){
             return res.status(400).json({
                 success : false,
                 message : "You cannot send connection request to yourself"
             })
         }
-        const allowedStatus = ["interested", "ignored"]
+        const allowedStatus = ["interested"]
         if(!allowedStatus.includes(status)){
             return res.status(400).json({
                 success : false,

@@ -26,7 +26,7 @@ export const login = async (req, res)=>{
         }else{
             const token = jwt.sign({id : user._id}, process.env.JWT_SECRET, {expiresIn : "100d"})
             res.cookie("token", token)
-            res.status(200).send({
+            res.status(200).json({
                 message : "Login successful",
                 user : user
             })

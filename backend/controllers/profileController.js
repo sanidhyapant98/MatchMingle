@@ -3,7 +3,7 @@ import { User } from "../models/userModel.js"
 export const getProfile = async (req, res)=>{
     try{
         const user = req.user
-        res.status(200).send(user)
+        res.status(200).json(user)
     }catch(err){
         res.status(400).send("Error : " + err.message)
     }
@@ -21,7 +21,7 @@ export const updateProfile = async (req, res)=>{
         const loggedInUser = req.user
         Object.keys(req.body).forEach((field) => (loggedInUser[field] = req.body[field]))
         await loggedInUser.save()
-        res.status(200).send({
+        res.status(200).json({
             message: "Profile updated successfully",
             data: loggedInUser
         })

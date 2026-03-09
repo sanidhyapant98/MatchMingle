@@ -7,6 +7,7 @@ import profileRouter from "./routes/profileRouter.js"
 import cookieParser from "cookie-parser"
 import requestRouter from "./routes/requestRouter.js"
 import userRouter from "./routes/userRoute.js"
+import cors from "cors"
 
 dotenv.config()
 
@@ -16,6 +17,10 @@ const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+}))
 
 app.use('/api/auth', authRouter)
 app.use('/api/profile', profileRouter)

@@ -34,10 +34,11 @@ export const logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await axios.post(`${API_BASE}/auth/logout`);
-      localStorage.removeItem('user');
       return null;
     } catch (error) {
       return rejectWithValue(error.response?.data || 'Logout failed');
+    } finally {
+      localStorage.removeItem('user');
     }
   }
 );
@@ -104,6 +105,8 @@ const authSlice = createSlice({
       })
       .addCase(logout.rejected, (state, action) => {
         state.isLoading = false;
+        state.user = null;
+        state.isAuthenticated = false;
         state.error = action.payload;
       });
   },

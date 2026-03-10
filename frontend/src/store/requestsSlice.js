@@ -96,9 +96,11 @@ const requestsSlice = createSlice({
       })
       .addCase(reviewConnectionRequest.fulfilled, (state, action) => {
         state.actionLoading = false;
-        state.received = state.received.filter(
-          (req) => req._id !== action.payload.connectionRequest._id
-        );
+        if (action.payload?.connectionRequest?._id) {
+          state.received = state.received.filter(
+            (req) => req._id !== action.payload.connectionRequest._id
+          );
+        }
       })
       .addCase(reviewConnectionRequest.rejected, (state, action) => {
         state.actionLoading = false;

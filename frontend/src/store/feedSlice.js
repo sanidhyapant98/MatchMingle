@@ -57,7 +57,8 @@ const feedSlice = createSlice({
       .addCase(fetchFeed.fulfilled, (state, action) => {
         state.isLoading = false;
         const newUsers = action.payload;
-        if (newUsers.length < 10) {
+        const limit = action.meta?.arg?.limit || 10;
+        if (newUsers.length < limit) {
           state.hasMore = false;
         }
         state.users = [...state.users, ...newUsers];

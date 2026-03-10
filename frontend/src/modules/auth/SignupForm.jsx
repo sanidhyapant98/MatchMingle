@@ -49,7 +49,9 @@ export default function SignupForm({ onSubmit, isLoading }) {
     e.preventDefault();
     const newErrors = validate();
     if (Object.keys(newErrors).length === 0) {
-      onSubmit(formData);
+      if (typeof onSubmit === 'function') {
+        onSubmit(formData);
+      }
     } else {
       setErrors(newErrors);
     }

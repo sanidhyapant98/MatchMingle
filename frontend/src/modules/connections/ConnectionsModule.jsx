@@ -5,7 +5,7 @@ import { Heart } from 'lucide-react';
 
 export default function ConnectionsModule() {
   const dispatch = useDispatch();
-  const { connections, isLoading } = useSelector((state) => state.profile);
+  const { connections, isLoading, error } = useSelector((state) => state.profile);
 
   useEffect(() => {
     dispatch(fetchConnections());
@@ -22,7 +22,19 @@ export default function ConnectionsModule() {
     );
   }
 
-  if (connections.length === 0) {
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-pink-50 flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="text-red-500 text-4xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Failed to load connections</h2>
+          <p className="text-gray-600">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!connections || connections.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-primary-50 to-pink-50 flex items-center justify-center p-4">
         <div className="text-center">
@@ -47,7 +59,7 @@ export default function ConnectionsModule() {
               className="card bg-white shadow-lg hover:shadow-xl transition-shadow overflow-hidden"
             >
               {/* Avatar */}
-              <div className="w-full h-64 bg-gradient-to-br from-primary-200 to-pink-200 rounded-lg mb-4 flex items-center justify-center">
+              <div className="w-full h-64 bg-gradient-to-br from-primary-200 to-pink-200 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
                 {connection.profileUrl ? (
                   <img
                     src={connection.profileUrl}

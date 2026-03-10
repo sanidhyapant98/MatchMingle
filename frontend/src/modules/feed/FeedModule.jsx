@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchFeed,
@@ -27,31 +27,35 @@ export default function FeedModule() {
   const handleInterested = async () => {
     if (!currentUser) return;
     setActionInProgress(true);
-    const result = await dispatch(
-      sendConnectionRequest({
-        toUserId: currentUser._id,
-        status: 'interested',
-      })
-    );
-    if (!result.error) {
+    try {
+      const result = await dispatch(
+        sendConnectionRequest({
+          toUserId: currentUser._id,
+          status: 'interested',
+        })
+      ).unwrap();
       dispatch(removeCurrentUser());
+    } catch (error) {
+      // Typically we'd call a toast notification here
+      console.error('Failed to send interest:', error);
+    } finally {
+      setActionInProgress(false);
     }
-    setActionInProgress(false);
   };
 
   const handleIgnore = () => {
     dispatch(removeCurrentUser());
   };
 
-  const handleLoadMore = () => {
-    if (currentUserIndex >= users.length - 3 && hasMore) {
+  const handleLoadMore = useCallback(() => {
+    if (!isLoading && hasMore && currentUserIndex >= users.length - 3) {
       dispatch(fetchFeed({ page: Math.floor(users.length / 10) + 1 }));
     }
-  };
+  }, [dispatch, isLoading, hasMore, currentUserIndex, users.length]);
 
   useEffect(() => {
     handleLoadMore();
-  }, [currentUserIndex]);
+  }, [handleLoadMore, currentUserIndex]);
 
   if (isLoading && users.length === 0) {
     return (
@@ -92,7 +96,7 @@ export default function FeedModule() {
             <div className="flex justify-between gap-4">
               <button
                 onClick={handleIgnore}
-                disabled={actionInProgress}
+                disabled={actionInProgress || actionLoading}
                 className="flex-1 btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Pass

@@ -230,7 +230,7 @@ export default function ProfileModule() {
           <div className="mt-8 pt-8 border-t border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Account Information</h3>
             <p className="text-sm text-gray-600">
-              Member since {new Date(editedProfile.createdAt).toLocaleDateString()}
+              Member since {editedProfile?.createdAt ? new Date(editedProfile.createdAt).toLocaleDateString() : 'N/A'}
             </p>
           </div>
         </div>

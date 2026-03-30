@@ -19,8 +19,11 @@ export const signup = createAsyncThunk(
   "auth/signup",
   async (formData, thunkAPI) => {
     try {
-      const payload = { ...formData, age: Number(formData.age) };
-      return await signupUser(payload);
+      const age = Number(formData.age);
+      if (Number.isNaN(age) || age <= 0) {
+        return thunkAPI.rejectWithValue("Invalid age provided");
+      }
+      const payload = { ...formData, age };      return await signupUser(payload);
     } catch (err) {
       const data = err.response?.data;
       const message =

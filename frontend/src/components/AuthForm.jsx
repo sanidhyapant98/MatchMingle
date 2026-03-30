@@ -73,10 +73,11 @@ export default function AuthForm() {
         {!isLogin && (
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium">First Name</label>
+              <label htmlFor="firstName" className="text-sm font-medium">First Name</label>
               <input
                 type="text"
                 name="firstName"
+                id="firstName"
                 placeholder="John"
                 className="w-full h-11 mt-1 px-3 rounded-lg border bg-[#FDFBF7]"
                 value={form.firstName}
@@ -146,11 +147,12 @@ export default function AuthForm() {
               </select>
             </div>
             <div>
-              <label className="text-sm font-medium">Age</label>
               <input
                 type="number"
                 name="age"
                 placeholder="21"
+                min="1"
+                max="120"
                 className="w-full h-11 mt-1 px-3 rounded-lg border bg-[#FDFBF7]"
                 value={form.age}
                 onChange={handleInputChange}
